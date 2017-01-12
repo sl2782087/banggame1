@@ -1,0 +1,28 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sl2782087/game.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sl2782087/game/issues"
+  },
+  "homepage": "https://github.com/sl2782087/game#readme",
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "phaser": "^2.6.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-watch": "^4.3.11"
+  }
+}
