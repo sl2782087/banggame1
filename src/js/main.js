@@ -9,6 +9,8 @@ $(function () {
     var unit = 1080 / _width;
     var game = new Phaser.Game(_width, _height, Phaser.AUTO, 'game-box');
     game.States = {};
+    var bgm,clickbgm;
+    var isStop = true;
     var runArr = ['run_00', 'run_01', 'run_02', 'run_03', 'run_04', 'run_05', 'run_06', 'run_07', 'run_08', 'run_09', 'run_10', 'run_11', 'run_12', 'run_13', 'run_14', 'run_15'];
     var getArr = ['get_00', 'get_01', 'get_02', 'get_03', 'get_04', 'get_05', 'get_06', 'get_07', 'get_08', 'get_09', 'get_10', 'get_11', 'get_12', 'get_13', 'get_14', 'get_15', 'get_16', 'get_17', 'get_18', 'get_19'];
     var loseArr = ['lose_00', 'lose_01', 'lose_02', 'lose_03', 'lose_04', 'lose_05', 'lose_06', 'lose_07', 'lose_08', 'lose_09', 'lose_10', 'lose_11', 'lose_12', 'lose_13', 'lose_14', 'lose_15', 'lose_16', 'lose_17', 'lose_18', 'lose_19', 'lose_20', 'lose_21', 'lose_22', 'lose_23', 'lose_24', 'lose_25', 'lose_26', 'lose_27', 'lose_28', 'lose_29', 'lose_30', 'lose_31', 'lose_32', 'lose_33', 'lose_34', 'lose_35', 'lose_36'];
@@ -81,7 +83,6 @@ $(function () {
 
 
             game.load.spritesheet('voice', '/src/images/voice.png', 105, 105, 2);
-            // game.load.spritesheet('getchange','/src/images/getchange.png',112,200,20);
             game.load.atlas('allbang', '/src/images/bangAll.png', '/src/images/bangAll.json');
             game.load.image('ground', '/src/images/ground.jpg');
             game.load.image('title', '/src/images/title.png');
@@ -92,6 +93,9 @@ $(function () {
             game.load.image('boom', '/src/images/boom.png');
             game.load.image('scorebox', '/src/images/scorebox.png');
             game.load.image('score', '/src/images/score.png');
+            game.load.image('overbox', '/src/images/overbox.png');
+            game.load.image('again', '/src/images/again.png');
+            game.load.image('link', '/src/images/link.png');
             game.load.audio('bgm', '/src/audio/bgm.mp3', true);
             game.load.audio('boom', '/src/audio/boom.mp3', true);
             game.load.audio('click', '/src/audio/button.mp3', true);
@@ -111,11 +115,11 @@ $(function () {
     game.States.mainState = function () {
         this.create = function () {
             this.bgmControl = function () {
-                game.musicPause ? (game.musicPause = false, this.voiceBtn.frame = 0, this.bgm.play()) : (game.musicPause = true, this.voiceBtn.frame = 1, this.bgm.stop());
+                game.musicPause ? (game.musicPause = false, this.voiceBtn.frame = 0, bgm.play()) : (game.musicPause = true, this.voiceBtn.frame = 1, bgm.stop());
             };
             this.startGame = function () {
-                this.clickbgm = game.add.audio('click', 0.5, false);
-                this.clickbgm.play();
+                clickbgm = game.add.audio('click', 0.5, false);
+                clickbgm.play();
                 setTimeout(function () {
                     game.state.start('game');
                 }, 1000);
@@ -144,8 +148,8 @@ $(function () {
             this.startGame.width = 309 / unit;
             this.startGame.height = 311 / unit;
             // 音乐控制
-            this.bgm = game.add.sound('bgm', 0.5, true);
-            this.bgm.play();
+            bgm = game.add.sound('bgm', 0.5, true);
+            bgm.play();
             this.voiceBtn = game.add.sprite(923 / unit, 45 / unit, 'voice', 0);
             this.voiceBtn.width = 105 / unit;
             this.voiceBtn.height = 105 / unit;
@@ -156,7 +160,7 @@ $(function () {
             this.bang.anchor.set(0.5, 1);
             this.bang.width = 700 / unit;
             this.bang.height = 750 / unit;
-            this.bang.animations.add('run',runArr);
+            this.bang.animations.add('run', runArr);
             this.bang.animations.play('run', 20, true);
             //鸡冠
             this.comb1 = game.add.sprite(138 / unit, 1428 / unit, 'comb');
@@ -208,38 +212,72 @@ $(function () {
             this.bang.anchor.set(0.5, 1);
             this.bang.width = 700 / unit;
             this.bang.height = 750 / unit;
-            this.bang.animations.add('bangrun',runArr);
-            this.bang.animations.add('bangget',getArr);
-            this.bang.animations.add('banglose',loseArr);
+            this.bang.animations.add('bangrun', runArr);
+            this.bang.animations.add('bangget', getArr);
+            this.bang.animations.add('banglose', loseArr);
             this.bang.animations.play('bangrun', 20, true);
             game.physics.arcade.enable(this.bang);
+            this.bang.body.height = 460 / unit;
             this.bang.body.collideWorldBounds = true;
+
+            this.onStart();
+
             //分数
+            this.showScore = game.add.sprite();
             this.scoreBox = game.add.sprite(25 / unit, 20 / unit, 'scorebox');
             this.scoreBox.width = 525 / unit;
             this.scoreBox.height = 157 / unit;
+            this.showScore.addChild(this.scoreBox);
             this.score = game.add.retroFont('score', 32, 62, "0123456789", 10, 0, 0);
             this.score.setFixedWidth(320, Phaser.RetroFont.ALIGN_RIGHT);
-            this.score.text = "0"
+            this.score.text = "0";
             this.num = game.add.image(200 / unit, 86 / unit, this.score);
             this.num.scale.set(1 / unit);
-            this.onStart();
+            this.showScore.addChild(this.num);
+            this.showScore.bringToTop();
             //音效
             this.getbgm = game.add.audio('get', 0.2, false);
+            this.boombgm = game.add.audio('boom', 0.2, false);
+            this.losebgm = game.add.audio('lose', 0.2, false);
 
-            // 变身
-            // this.getchanges=game.add.group();
-            // this.getchanges.createMultiple(3, 'getchange');
-            // this.getchanges.forEach(this.setupChange, this);
+            //游戏结束弹窗
+            this.overPopup = game.add.group();
+            this.overBox = game.add.image(46 / unit, 321 / unit, 'overbox');
+            this.overBox.width = 989 / unit;
+            this.overBox.height = 968 / unit;
+            this.overPopup.add(this.overBox);
+            this.againBtn = game.add.button(315 / unit, 595 / unit, 'again', function () {
+                this.losebgm.stop();
+                clickbgm.play();
+                setTimeout(function () {
+                    game.state.start('game');
+                    if(!game.musicPause){
+                        bgm.play();
+                    }
+                }, 1000);
+            }, this);
+            this.againBtn.width = 477 / unit;
+            this.againBtn.height = 143 / unit;
+            this.overPopup.add(this.againBtn);
+            this.linkBtn = game.add.button(315 / unit, 812 / unit, 'link', function () {
+
+            }, this);
+            this.linkBtn.width = 477 / unit;
+            this.linkBtn.height = 143 / unit;
+            this.overPopup.add(this.linkBtn);
+            this.overPopup.visible = false;
 
         };
         this.onStart = function () {
+            isStop = false;
+            game.time.events.start();
+
             //游戏开始
             this.bang.inputEnabled = true;
             this.bang.input.enableDrag(false);
             this.bang.input.allowVerticalDrag = false;
             this.scorecount = 0;
-
+            //设置下落物参数
             var drop = {
                 dropcomb: {
                     game: this,
@@ -248,7 +286,7 @@ $(function () {
                     velocity: 400,
                     acceleration: 200,
                     angularVelocity: 20,
-                    selfTimeInterval: 0.5,
+                    selfTimeInterval: 0.5
                 },
                 dropboom: {
                     game: this,
@@ -257,37 +295,61 @@ $(function () {
                     velocity: 350,
                     acceleration: 200,
                     angularVelocity: 0,
-                    selfTimeInterval: 0.8,
+                    selfTimeInterval: 0.8
                 }
-            }
+            };
             this.acomb = new Drop(drop.dropcomb);
             this.acomb.init();
             this.aboom = new Drop(drop.dropboom);
             this.aboom.init();
 
         };
+        this.showOverPopup = function () {
+            var _this = this;
+            bgm.stop();
+            setTimeout(function () {
+                _this.overPopup.visible = true;
+                _this.losebgm.play();
+            }, 1000);
+        };
+        this.stopGame = function () {
+            this.bang.inputEnabled = false;
+            game.time.events.stop(false);
+            this.acomb.drops.setAll('body.velocity.y', 0);
+            this.acomb.drops.setAll('body.acceleration.y', 0);
+            this.aboom.drops.setAll('body.velocity.y', 0);
+            this.aboom.drops.setAll('body.acceleration.y', 0);
+            this.bang.animations.currentAnim.stop();
+            this.bang.y = game.height - 95 / unit;
+            this.bang.animations.play('banglose', 20, false);
+            this.showOverPopup();
+            isStop = true;
+        };
         this.crashDrops = function (bang, drop) {
-            if (drop.key === "comb") {
+            console.log(drop.key);
+            if (!isStop && drop.key === "comb") {
                 drop.kill();
-                // this.bang.animations.stop('bangrun');
                 this.bang.animations.currentAnim.stop();
                 this.bang.animations.play('bangget', 20, false);
                 this.getbgm.play();
+                this.bang.body.offset.y = (370 / unit);
                 this.scorecount += 1000;
 
             } else {
-                // bang.kill();
-                // this.dead();
-                this.bang.animations.currentAnim.stop();
-                this.bang.animations.play('banglose', 20, false);
+                this.getbgm.stop();
+                this.boombgm.play();
+                drop.kill();
+                this.stopGame();
             }
-        }
+        };
         this.update = function () {
+            game.debug.body(this.bang);
             this.acomb && game.physics.arcade.overlap(this.acomb.drops, this.bang, this.crashDrops, null, this);
             this.aboom && game.physics.arcade.overlap(this.aboom.drops, this.bang, this.crashDrops, null, this);
-            if(this.bang.animations.currentAnim.isFinished){
+            if (!isStop && this.bang.animations.currentAnim.isFinished) {
                 this.bang.animations.play('bangrun', 20, true);
-            };
+                this.bang.body.offset.set(0, 0);
+            }
             this.score.text = "" + this.scorecount;
         };
     };
