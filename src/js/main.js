@@ -91,6 +91,7 @@ $(function () {
             game.load.image('scorebox', '/src/images/scorebox.png');
             game.load.image('score', '/src/images/score.png');
             game.load.image('overbox', '/src/images/overbox.png');
+            game.load.image('overscore', '/src/images/overnum.png');
             game.load.image('again', '/src/images/again.png');
             game.load.image('link', '/src/images/link.png');
             game.load.audio('bgm', '/src/audio/bgm.mp3', true);
@@ -210,7 +211,7 @@ $(function () {
             game.physics.arcade.enable(this.bang);
             this.bang.body.width = 220 / unit;
             this.bang.body.height = 400 / unit;
-            this.bang.body.offset.set(20 / unit, 10 / unit);
+            this.bang.body.offset.set(20 / unit, 20 / unit);
             this.bang.body.collideWorldBounds = true;
 
             this.onStart();
@@ -245,7 +246,11 @@ $(function () {
             this.overBox.width = 989 / unit;
             this.overBox.height = 1068 / unit;
             this.overPopup.add(this.overBox);
-            this.againBtn = game.add.button(315 / unit, 645 / unit, 'again', function () {
+            this.overscore = game.add.retroFont('overscore', 32, 62, "0123456789", 10, 0, 0);
+            this.overnum = game.add.image(603 / unit, 564 / unit, this.overscore);
+            this.overnum.scale.set(1 / unit);
+            this.overPopup.add(this.overnum);
+            this.againBtn = game.add.button(315 / unit, 695 / unit, 'again', function () {
                 this.losebgm.stop();
                 clickbgm.play();
                 setTimeout(function () {
@@ -258,11 +263,11 @@ $(function () {
             this.againBtn.width = 477 / unit;
             this.againBtn.height = 163 / unit;
             this.overPopup.add(this.againBtn);
-            this.linkBtn = game.add.button(315 / unit, 852 / unit, 'link', function () {
+            this.linkBtn = game.add.button(729 / unit, 1065 / unit, 'link', function () {
 
             }, this);
-            this.linkBtn.width = 477 / unit;
-            this.linkBtn.height = 163 / unit;
+            this.linkBtn.width = 240 / unit;
+            this.linkBtn.height = 60 / unit;
             this.overPopup.add(this.linkBtn);
             this.overPopup.visible = false;
 
@@ -323,6 +328,7 @@ $(function () {
             this.bang.y = game.height - 95 / unit;
             this.bang.animations.play('banglose', 20, false);
             this.showOverPopup();
+            this.overscore.text = ""+this.scorecount;
         };
         this.setLevel = function () {
             switch (this.scorecount) {
@@ -352,7 +358,7 @@ $(function () {
                 this.bang.animations.currentAnim.stop();
                 this.bang.animations.play('bangget', 20, false);
                 this.getbgm.play();
-                this.bang.body.offset.set(20 / unit, 200 / unit);
+                this.bang.body.offset.set(40 / unit, 230 / unit);
                 this.scorecount += 1000;
                 this.setLevel();
             } else {
@@ -367,7 +373,7 @@ $(function () {
             this.aboom && game.physics.arcade.overlap(this.aboom.drops, this.bang, this.crashDrops, null, this);
             if (!isStop && this.bang.animations.currentAnim.isFinished) {
                 this.bang.animations.play('bangrun', 20, true);
-                this.bang.body.offset.set(20 / unit, 10 / unit);
+                this.bang.body.offset.set(20 / unit, 20 / unit);
             }
             this.score.text = "" + this.scorecount;
         };
