@@ -51,10 +51,10 @@ $(function () {
             game.musicPause = false;
         };
         this.preload = function () {
-            game.load.image('loadbg', '/src/images/loadbg.jpg');
-            game.load.image('loadword', '/src/images/loadword.png');
-            game.load.image('progress', '/src/images/progress.png');
-            game.load.image('progressBar', '/src/images/progressBar.png');
+            game.load.image('loadbg', './src/images/loadbg.jpg');
+            game.load.image('loadword', './src/images/loadword.png');
+            game.load.image('progress', './src/images/progress.png');
+            game.load.image('progressBar', './src/images/progressBar.png');
         };
         this.create = function () {
             game.state.start('loader');
@@ -83,26 +83,26 @@ $(function () {
             this.loadword.width = 193 / unit;
             this.loadword.height = 40 / unit;
             //加载资源
-            game.load.spritesheet('voice', '/src/images/voice.png', 105, 105, 2);
-            game.load.atlas('allbang', '/src/images/bangAll.png', '/src/images/bangAll.json');
-            game.load.image('ground', '/src/images/ground.jpg');
-            game.load.image('title', '/src/images/title.png');
-            game.load.image('startBtn', '/src/images/startBtn.png');
-            game.load.image('help', '/src/images/help.png');
-            game.load.image('popup', '/src/images/popup.png');
-            game.load.image('comb', '/src/images/comb.png');
-            game.load.spritesheet('boom', '/src/images/boom.png',75,118);
-            game.load.image('scorebox', '/src/images/scorebox.png');
-            game.load.image('score', '/src/images/score.png');
-            game.load.image('overbox', '/src/images/overbox.png');
-            game.load.image('overscore', '/src/images/overnum.png');
-            game.load.image('again', '/src/images/again.png');
-            game.load.image('link', '/src/images/link.png');
-            game.load.audio('bgm', '/src/audio/bgm.mp3', true);
-            game.load.audio('boom', '/src/audio/boom.mp3', true);
-            game.load.audio('click', '/src/audio/button.mp3', true);
-            game.load.audio('get', '/src/audio/get.mp3', true);
-            game.load.audio('lose', '/src/audio/lose.mp3', true);
+            game.load.spritesheet('voice', './src/images/voice.png', 105, 105, 2);
+            game.load.atlas('allbang', './src/images/bangAll.png', './src/images/bangAll.json');
+            game.load.image('ground', './src/images/ground.jpg');
+            game.load.image('title', './src/images/title.png');
+            game.load.image('startBtn', './src/images/startBtn.png');
+            game.load.image('help', './src/images/help.png');
+            game.load.image('popup', './src/images/popup.png');
+            game.load.image('comb', './src/images/comb.png');
+            game.load.spritesheet('boom', './src/images/boom.png',75,118);
+            game.load.image('scorebox', './src/images/scorebox.png');
+            game.load.image('score', './src/images/score.png');
+            game.load.image('overbox', './src/images/overbox.png');
+            game.load.image('overscore', './src/images/overnum.png');
+            game.load.image('again', './src/images/again.png');
+            game.load.image('link', './src/images/link.png');
+            game.load.audio('bgm', './src/audio/bgm.mp3', true);
+            game.load.audio('boom', './src/audio/boom.mp3', true);
+            game.load.audio('click', './src/audio/button.mp3', true);
+            game.load.audio('get', './src/audio/get.mp3', true);
+            game.load.audio('lose', './src/audio/lose.mp3', true);
 
             game.load.onLoadComplete.add(function () {
                 game.sound.setDecodedCallback(['bgm', 'boom', 'click', 'get', 'lose'], function () {
