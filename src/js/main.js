@@ -1,8 +1,12 @@
 $(function () {
-    $("body>a").hide();
-
     var _width = window.screen.availWidth;
     var _height = window.screen.availHeight;
+    var type=_height/_width;
+    if(type<1.5){
+        _width=320;
+        _height=568;
+        $("#game-box")[0].style.cssText="width:320px;height:568px;margin:50px auto;";
+    }
     var dheight = window.screen.availHeight - document.documentElement.clientHeight;
     var unit = 1080 / _width;
     var game = new Phaser.Game(_width, _height, Phaser.AUTO, 'game-box');
@@ -43,7 +47,7 @@ $(function () {
         this.init = function () {
             game.scale.pagesAlignHorizontally = true;
             game.scale.pageAlignVertically = true;
-            game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+            // game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
             game.musicPause = false;
         };
         this.preload = function () {
