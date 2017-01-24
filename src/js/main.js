@@ -159,7 +159,7 @@ $(function () {
             this.voiceBtn.height = 105 / unit;
             this.voiceBtn.inputEnabled = true;
             this.voiceBtn.events.onInputDown.add(game.bgmControl, this);
-            //海豚
+            //鼹鼠
             this.bang = game.add.sprite(game.world.centerX, game.height - 178 / unit, 'allbang');
             this.bang.anchor.set(0.5, 1);
             this.bang.width = 260 / unit;
@@ -209,7 +209,7 @@ $(function () {
             this.ground.width = game.width;
             this.ground.height = 195 / unit;
             game.physics.arcade.enable(this.ground);
-            //海豚
+            //鼹鼠
             this.bang = game.add.sprite(game.world.centerX, game.height - 178 / unit, 'allbang');
             this.bang.anchor.set(0.5, 1);
             this.bang.width = 260 / unit;
