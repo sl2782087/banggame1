@@ -14,7 +14,7 @@ $(function () {
     var getArr = ['get_00', 'get_01', 'get_02', 'get_03', 'get_04', 'get_05', 'get_06', 'get_07', 'get_08', 'get_09', 'get_10', 'get_11', 'get_12', 'get_13', 'get_14', 'get_15', 'get_16', 'get_17', 'get_18', 'get_19'];
     var loseArr = ['lose_00', 'lose_01', 'lose_02', 'lose_03', 'lose_04', 'lose_05', 'lose_06', 'lose_07', 'lose_08', 'lose_09', 'lose_10', 'lose_11', 'lose_12', 'lose_13', 'lose_14', 'lose_15', 'lose_16', 'lose_17', 'lose_18', 'lose_19', 'lose_20', 'lose_21', 'lose_22', 'lose_23', 'lose_24', 'lose_25', 'lose_26', 'lose_27', 'lose_28', 'lose_29', 'lose_30', 'lose_31', 'lose_32', 'lose_33', 'lose_34', 'lose_35', 'lose_36'];
 
-// 天降之物
+    // 天降之物
     function Drop(config) {
         this.init = function () {
             this.drops = game.add.group();
@@ -38,7 +38,7 @@ $(function () {
         };
     }
 
-// 游戏初始化场景
+    // 游戏初始化场景
     game.States.bootState = function () {
         this.init = function () {
             game.scale.pagesAlignHorizontally = true;
@@ -56,7 +56,7 @@ $(function () {
             game.state.start('loader');
         };
     };
-//游戏加载场景
+    //游戏加载场景
     game.States.loaderState = function () {
         this.init = function () {
             this.bg = game.add.sprite(0, 0, 'loadbg');
@@ -87,7 +87,7 @@ $(function () {
             game.load.image('help', '/src/images/help.png');
             game.load.image('popup', '/src/images/popup.png');
             game.load.image('comb', '/src/images/comb.png');
-            game.load.image('boom', '/src/images/boom.png');
+            game.load.spritesheet('boom', '/src/images/boom.png',75,118);
             game.load.image('scorebox', '/src/images/scorebox.png');
             game.load.image('score', '/src/images/score.png');
             game.load.image('overbox', '/src/images/overbox.png');
@@ -102,7 +102,9 @@ $(function () {
 
             game.load.onLoadComplete.add(function () {
                 game.sound.setDecodedCallback(['bgm', 'boom', 'click', 'get', 'lose'], function () {
-                    tween.to({width: 861 / unit}, 800, null, true);
+                    tween.to({
+                        width: 861 / unit
+                    }, 800, null, true);
                     setTimeout(function () {
                         game.state.start('main');
                     }, 1500);
@@ -166,12 +168,16 @@ $(function () {
             this.comb1.height = 157 / unit;
             this.comb1.rotation = 1.5 * Math.PI;
             var updown1 = this.add.tween(this.comb1);
-            updown1.to({top: 1350 / unit}, 500, Phaser.Easing.Quadratic.InOut, true, 0, Number.MAX_VALUE, true);
+            updown1.to({
+                top: 1350 / unit
+            }, 500, Phaser.Easing.Quadratic.InOut, true, 0, Number.MAX_VALUE, true);
             this.comb2 = game.add.sprite(825 / unit, 1347 / unit, 'comb');
             this.comb2.width = 137 / unit;
             this.comb2.height = 157 / unit;
             var updown2 = this.add.tween(this.comb2);
-            updown2.to({top: 1250 / unit}, 700, Phaser.Easing.Quadratic.InOut, true, 300, Number.MAX_VALUE, true);
+            updown2.to({
+                top: 1250 / unit
+            }, 700, Phaser.Easing.Quadratic.InOut, true, 300, Number.MAX_VALUE, true);
             //帮助信息
             this.helpBtn = game.add.button(game.width, 912 / unit, 'help', this.showHelp, this);
             this.helpBtn.anchor.set(1, 0);
@@ -307,6 +313,10 @@ $(function () {
             this.acomb.init();
             this.aboom = new Drop(drop.dropboom);
             this.aboom.init();
+            this.aboom.drops.forEach(function (drop) { 
+                drop.animations.add("fire");
+                drop.animations.play("fire",20,true);
+             });
         };
         this.showOverPopup = function () {
             var _this = this;
@@ -328,27 +338,32 @@ $(function () {
             this.bang.y = game.height - 95 / unit;
             this.bang.animations.play('banglose', 20, false);
             this.showOverPopup();
-            this.overscore.text = ""+this.scorecount;
+            this.overscore.text = "" + this.scorecount;
         };
         this.setLevel = function () {
             switch (this.scorecount) {
                 case 10000:
-                    level = 20;
+                    level = 50;
                     break;
                 case 50000:
-                    level = 80;
+                    level = 100;
                     this.acomb.loopevent.delay = 300;
                     this.aboom.loopevent.delay = 800;
                     break;
                 case 100000:
-                    level = 150;
+                    level = 200;
                     this.acomb.loopevent.delay = 250;
-                    this.aboom.loopevent.delay = 750;
+                    this.aboom.loopevent.delay = 600;
                     break;
                 case 200000:
-                    level = 200;
+                    level = 250;
                     this.acomb.loopevent.delay = 200;
-                    this.aboom.loopevent.delay = 700;
+                    this.aboom.loopevent.delay = 400;
+                    break;
+                case 300000:
+                    level = 300;
+                    this.acomb.loopevent.delay = 200;
+                    this.aboom.loopevent.delay = 300;
                     break;
             }
         };
